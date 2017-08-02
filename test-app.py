@@ -38,6 +38,7 @@ def MainWindow(event):
 		T = -1
 
 	if not (questions != '' and N > 0 and subject != '' and name != '' and _time != '' and T > 0):
+		messagebox.showinfo("Notification", "Invalid input!")
 		return None
 
 	win.destroy()
@@ -70,7 +71,7 @@ def countdown():
 		stopButton.config(state=DISABLED)
 		Answer(DISABLED)
 		if (_h + _m + _s == 0):
-			messagebox.showinfo("Notification", "Test has been ended.", )
+			messagebox.showinfo("Notification", "Test has been ended.")
 		return None
 
 	global time_lasted
@@ -122,7 +123,7 @@ def Check():
 
 	s = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
 
-	fi = open(s, 'r')
+	fi = open(s, 'r', encoding='utf8')
 	while 1 == 1:
 		ss = fi.readline()
 		if len(ss) == 0:
@@ -140,15 +141,21 @@ def Check():
 	blank = 0
 
 	for i in range(1, N + 1):
-		if var[i].get() == ans[i]:
-			resLab[i].config(text=u'\u2713', fg="#00FF00")
-			true += 1
-		else:
-			resLab[i].config(text=u'\u2717', fg="#FF0000")
-			if (var[i].get() != "E"):
-				false += 1
+		if i in ans:
+			if var[i].get() == ans[i]:
+				resLab[i].config(text=u'\u2713', fg="#00FF00")
+				true += 1
 			else:
-				blank += 1
+				resLab[i].config(text=u'\u2717', fg="#FF0000")
+				if (var[i].get() != "E"):
+					false += 1
+				else:
+					blank += 1
+
+		else:
+			messagebox.showinfo("Notification", "Your answer file is missing some questions...")
+			return None
+
 	exportButton.config(state=NORMAL)
 
 	global score
@@ -281,19 +288,19 @@ fr2 = Frame(root, bd=0)
 fr2.pack()
 fr2.place(x=_L, y=35, height=_h, width=4*(_w+_d)-_d)
 
-startButton=Button(fr2, text="Start", command=Start, state=NORMAL)
+startButton = Button(fr2, text="Start", command=Start, state=NORMAL)
 startButton.pack()
 startButton.place(x=0, y=0, height=_h, width=_w)
 
-stopButton=Button(fr2, text="Stop", command=Stop, state=DISABLED)
+stopButton = Button(fr2, text="Stop", command=Stop, state=DISABLED)
 stopButton.pack()
 stopButton.place(x=_w+_d, y=0, height=_h, width=_w)
 
-checkButton=Button(fr2, text="Check", command=Check, state=DISABLED)
+checkButton = Button(fr2, text="Check", command=Check, state=DISABLED)
 checkButton.pack()
 checkButton.place(x=2*(_w+_d), y=0, height=_h, width=_w)
 
-exportButton=Button(fr2, text="Export", command=Export, state=DISABLED)
+exportButton = Button(fr2, text="Export", command=Export, state=DISABLED)
 exportButton.pack()
 exportButton.place(x=3*(_w+_d), y=0, height=_h, width=_w)
 
